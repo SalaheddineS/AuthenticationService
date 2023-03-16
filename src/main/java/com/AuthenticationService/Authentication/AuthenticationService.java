@@ -1,11 +1,11 @@
 package com.AuthenticationService.Authentication;
 
 
+import com.AuthenticationService.Repository.AuthRepository;
+
 import com.AuthenticationService.Util.JwtUtil;
-import io.jsonwebtoken.Header;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.http.HttpHeaders;
@@ -17,7 +17,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
-
+    @Autowired
+    private AuthRepository _authRepository;
     private final PasswordEncoder _passwordEncoder;
     private final MongoTemplate _mongoTemplate;
     private final JwtUtil _jwtUtil;
@@ -36,10 +37,7 @@ public class AuthenticationService {
 
     public ResponseEntity<String> CreateUser(Authentication User) {
         try {
-            Query query = new Query();
-            query.addCriteria(Criteria.where("email").is(User.getEmail()));
-            boolean userExists = _mongoTemplate.exists(query, Authentication.class, "authentication");
-            if (userExists) {
+            if (_authRepository.existsByEmail(User.getEmail())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("Email Already Exists");
             }
             if (User.getEmail() != null
@@ -50,19 +48,17 @@ public class AuthenticationService {
                     && User.getPassword() != null
                     && User.getPassword() != "") {
                 User.setPassword(HashPassword(User.getPassword()));
-                _mongoTemplate.save(User, "authentication");
+                _authRepository.save(User);
                 return ResponseEntity.status(HttpStatus.CREATED).body("User Created");
             }
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Request");
         } catch (Exception e) {
-            throw new RuntimeException("Error whilst creating new user , for more info check:" + e);
+            throw new RuntimeException("Error whilst creating new user, for more info check:" + e);
         }
     }
 
     public ResponseEntity<String> ConnectUser(Authentication User) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("email").is(User.getEmail()));
-        Authentication user = _mongoTemplate.findOne(query, Authentication.class, "authentication");
+        Authentication user=_authRepository.findByEmail(User.getEmail());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Account Inexistant");
         }
@@ -75,7 +71,9 @@ public class AuthenticationService {
             String token = _jwtUtil.generateToken(user.getEmail(), user.getId());
             Update update = new Update();
             update.set("token", token);
-            _mongoTemplate.updateFirst(query, update, Authentication.class, "authentication");
+            Query query = new Query();
+            query.addCriteria(org.springframework.data.mongodb.core.query.Criteria.where("email").is(user.getEmail()));
+            _mongoTemplate.updateFirst(query, update, Authentication.class);
             // Send token
             HttpHeaders headers = new HttpHeaders();
             headers.add("Authorization", "Bearer " + token);
@@ -91,12 +89,15 @@ public class AuthenticationService {
         if (token == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No token provided" + token);
         String id = _jwtUtil.getIdFromToken(token);
         if (id == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No token provided");
-        Query query = new Query();
-        query.addCriteria(Criteria.where("id").is(id));
+        Authentication user = _authRepository.findUserById(id);
+        if (user == null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Wrong Id");
         Update update = new Update();
         update.set("token", "");
         try {
-            _mongoTemplate.updateFirst(query, update, Authentication.class, "authentication");
+            Query query = new Query();
+            query.addCriteria(org.springframework.data.mongodb.core.query.Criteria.where("email").is(user.getEmail()));
+            _mongoTemplate.updateFirst(query, update, Authentication.class);
+
         } catch (Exception e) {
             throw new RuntimeException("Error whilst logging out , for more info check:" + e);
         }
