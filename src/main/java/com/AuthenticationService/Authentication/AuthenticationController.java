@@ -2,6 +2,7 @@ package com.AuthenticationService.Authentication;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,5 +29,23 @@ public class AuthenticationController {
             throw e;
         }
     }
+    @GetMapping("/logoutUser")
+    public ResponseEntity<String> Logout(@RequestHeader HttpHeaders headers){
+        try{
+            return _authenticationService.Logout(headers);
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
 
+    @GetMapping("/ValidateToken")
+    public boolean ValidateToken(@RequestHeader HttpHeaders headers){
+        try{
+            return _authenticationService.ValidateToken(headers);
+        }
+        catch (Exception e){
+            throw e;
+        }
+    }
 }
