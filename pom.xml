@@ -8,8 +8,8 @@
 		<version>3.0.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.emsi</groupId>
-	<artifactId>exercice1</artifactId>
+	<groupId>com.service</groupId>
+	<artifactId>authentication</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>exercice1</name>
 	<description>Excercice demo pour tester Spring</description>

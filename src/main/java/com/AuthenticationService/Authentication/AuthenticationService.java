@@ -106,7 +106,7 @@ public class AuthenticationService {
     }
 
     public boolean ValidateToken(HttpHeaders headers){
-         String token = headers.getFirst("Authorization");
+        String token = headers.getFirst("Authorization");
         if (token == null) return false;
         return _jwtUtil.validateToken(token);
     }

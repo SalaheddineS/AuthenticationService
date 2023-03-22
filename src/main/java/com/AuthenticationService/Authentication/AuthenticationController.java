@@ -16,10 +16,14 @@ public class AuthenticationController {
         _authenticationService = authenticationService;
     }
 
+
     @PostMapping("/AddUser")
     public ResponseEntity AddUser(@RequestBody Authentication User){
         return _authenticationService.CreateUser(User);
     }
+
+    @RequestMapping(value = "/GetUser", method = RequestMethod.GET)
+
 
     @PostMapping("/ConnectUser")
     public ResponseEntity<String> ConnectUser(@RequestBody Authentication User){
