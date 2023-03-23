@@ -18,11 +18,11 @@ jobs:
     - name: Write properties to file
       run: |
         cd ${{ github.workspace }}
-        echo "spring.data.mongodb.uri=${{ secrets.URI }}" >> src/main/resources/application.properties
-        echo "spring.data.mongodb.username=${{ secrets.USRANDPASS }}" >> src/main/resources/application.properties
-        echo "spring.data.mongodb.password=${{ secrets.USRANDPASS }}" >> src/main/resources/application.properties
-        echo "spring.data.mongodb.database=${{ secrets.DB }}" >> src/main/resources/application.properties
-        echo "jwt.secret=${{ secrets.JWT_SECRET }}" >> src/main/resources/application.properties
+        echo "spring.data.mongodb.uri=${{ secrets.URI }}" >> ./src/main/resources/application.properties
+        echo "spring.data.mongodb.username=${{ secrets.USRANDPASS }}" >> ./src/main/resources/application.properties
+        echo "spring.data.mongodb.password=${{ secrets.USRANDPASS }}" >> ./src/main/resources/application.properties
+        echo "spring.data.mongodb.database=${{ secrets.DB }}" >> ./src/main/resources/application.properties
+        echo "jwt.secret=${{ secrets.JWT_SECRET }}" >> ./src/main/resources/application.properties
 
     - name: Checkout code
       uses: actions/checkout@v2
