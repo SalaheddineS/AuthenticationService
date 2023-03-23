@@ -8,22 +8,35 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      spring.data.mongodb.uri: mongodb+srv://salaheddine2000:salaheddine2000@cluster0.o97vm5q.mongodb.net/SpringBoot2?retryWrites=true&w=majority
-      spring.data.mongodb.username: salaheddine2000
-      spring.data.mongodb.password: salaheddine2000
-      spring.data.mongodb.database: SpringBoot2
-
-      jwt.secret: ThIsIsMySecrEtkEeEyAndImUsingItToSignMyJwtTokenHEHEHEbBoI
+    
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
     - name: Set up JDK 17
       uses: actions/setup-java@v3.10.0
       with:
         java-version: '17'
         distribution: 'adopt'
+        
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Write value to Properties-file
+      uses: christian-draeger/write-properties@1.1.0
+      with:
+        path: './src/main/resources/application.properties'
+        property: |
+          'spring.data.mongodb.uri'
+          'spring.data.mongodb.username'
+          'spring.data.mongodb.password'
+          'spring.data.mongodb.database'
+          'jwt.secret'
+        value: |
+          'mongodb+srv://salaheddine2000:salaheddine2000@cluster0.o97vm5q.mongodb.net/SpringBoot2 retryWrites=true&w=majority'
+          'salaheddine2000'
+          'salaheddine2000'
+          'SpringBoot2'
+          'ThIsIsMySecrEtkEeEyAndImUsingItToSignMyJwtTokenHEHEHEbBoI'
+  
+
 
     - name: Run tests
       run: mvn test --file pom.xml
