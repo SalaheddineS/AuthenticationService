@@ -10,8 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Write properties to file
-      run: ls
+ 
     - name: Set up JDK 17
       uses: actions/setup-java@v3.10.0
       with:
