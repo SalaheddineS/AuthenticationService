@@ -12,7 +12,7 @@ jobs:
     steps:
     - name: Write properties to file
       run: |
-        touch AuthenticationService/src/main/resources/application.properties
+        ls
         echo "spring.data.mongodb.uri=${{ secrets.URI }}" >> "AuthenticationService/src/main/resources/application.properties"
         echo "spring.data.mongodb.username=${{ secrets.USRANDPASS }}" >> "AuthenticationService/src/main/resources/application.properties"
         echo "spring.data.mongodb.password=${{ secrets.USRANDPASS }}" >> "AuthenticationService/src/main/resources/application.properties"
