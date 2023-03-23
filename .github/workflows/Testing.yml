@@ -15,26 +15,16 @@ jobs:
       with:
         java-version: '17'
         distribution: 'adopt'
-        
+    - name: Write properties to file
+      run: |
+        echo "spring.data.mongodb.uri=${{ secrets.URI }}" >> AuthenticationService/src/main/resources/application.properties
+        echo "spring.data.mongodb.username=${{ secrets.USRANDPASS }}" >> AuthenticationService/src/main/resources/application.properties
+        echo "spring.data.mongodb.password=${{ secrets.USRANDPASS }}" >> AuthenticationService/src/main/resources/application.properties
+        echo "spring.data.mongodb.database=${{ secrets.DB }}" >> AuthenticationService/src/main/resources/application.properties
+        echo "jwt.secret=${{ secrets.JWT_SECRET }}" >> AuthenticationService/src/main/resources/application.properties
+
     - name: Checkout code
       uses: actions/checkout@v2
-    
-    - name: Write value to Properties-file
-      uses: christian-draeger/write-properties@1.1.0
-      with:
-        path: './src/main/resources/application.properties'
-        property: |
-          'spring.data.mongodb.uri'
-          'spring.data.mongodb.username'
-          'spring.data.mongodb.password'
-          'spring.data.mongodb.database'
-          'jwt.secret'
-        value: |
-          'mongodb+srv://salaheddine2000:salaheddine2000@cluster0.o97vm5q.mongodb.net/SpringBoot2 retryWrites=true&w=majority'
-          'salaheddine2000'
-          'salaheddine2000'
-          'SpringBoot2'
-          'ThIsIsMySecrEtkEeEyAndImUsingItToSignMyJwtTokenHEHEHEbBoI'
   
 
 
