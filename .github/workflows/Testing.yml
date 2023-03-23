@@ -17,7 +17,7 @@ jobs:
         distribution: 'adopt'
     - name: Write properties to file
       run: |
-        cd AuthenticationService
+        cd ${{ github.workspace }}
         echo "spring.data.mongodb.uri=${{ secrets.URI }}" >> src/main/resources/application.properties
         echo "spring.data.mongodb.username=${{ secrets.USRANDPASS }}" >> src/main/resources/application.properties
         echo "spring.data.mongodb.password=${{ secrets.USRANDPASS }}" >> src/main/resources/application.properties
