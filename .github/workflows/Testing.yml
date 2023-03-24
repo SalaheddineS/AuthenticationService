@@ -26,11 +26,11 @@ jobs:
       
     - name: Update application.properties file
       run: |
-        sed -i "s|spring.data.mongodb.uri=.*|spring.data.mongodb.uri=${URI}|g" AuthenticationService/src/main/resources/application.properties
-        sed -i "s|spring.data.mongodb.username=.*|spring.data.mongodb.username=${USRANDPASS}|g" AuthenticationService/src/main/resources/application.properties
-        sed -i "s|spring.data.mongodb.password=.*|spring.data.mongodb.password=${USRANDPASS}|g" AuthenticationService/src/main/resources/application.properties
-        sed -i "s|spring.data.mongodb.database=.*|spring.data.mongodb.database=${DB}|g" AuthenticationService/src/main/resources/application.properties
-        sed -i "s|jwt.secret=.*|jwt.secret=${TOKEN}|g" AuthenticationService/src/main/resources/application.properties
+        sed -i "s|spring.data.mongodb.uri=.*|spring.data.mongodb.uri=${URI}|g" src/main/resources/application.properties
+        sed -i "s|spring.data.mongodb.username=.*|spring.data.mongodb.username=${USRANDPASS}|g" src/main/resources/application.properties
+        sed -i "s|spring.data.mongodb.password=.*|spring.data.mongodb.password=${USRANDPASS}|g" src/main/resources/application.properties
+        sed -i "s|spring.data.mongodb.database=.*|spring.data.mongodb.database=${DB}|g" src/main/resources/application.properties
+        sed -i "s|jwt.secret=.*|jwt.secret=${TOKEN}|g" src/main/resources/application.properties
 
     - name: Run tests
       run: mvn test --file pom.xml
